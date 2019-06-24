@@ -20,6 +20,7 @@
 </template>
 <script>
 import axios from "axios"
+import '@/vendor/gt'  //引入极验的文件
 export default {
   name: "AppLogin",
   data () {
