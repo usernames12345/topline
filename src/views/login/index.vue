@@ -2,18 +2,18 @@
   <div class="login-wrap">
     <el-form class="login-form" ref="form" :model="form">
       <el-form-item>
-        <el-input v-model="form.mobile" placeholder="请输入手机号码"></el-input>
+        <el-input v-model= "form.mobile" placeholder="请输入手机号码"></el-input>
       </el-form-item>
       <el-form-item>
         <el-col :span="14">
-          <el-input v-model="form.code" placeholder="请输入验证码"></el-input>
+          <el-input v-model= "form.code" placeholder="请输入验证码"></el-input>
         </el-col>
         <el-col :offset="1" :span="9">
-          <el-button @click="handleSendCode">发送短信验证码</el-button>
+          <el-button @click= "handleSendCode">发送短信验证码</el-button>
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="login" @click="onSubmit">登录</el-button>
+        <el-button type="primary" class="login" @click= "handleLogin">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -32,13 +32,28 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
-      console.log("submit!")
+    handleLogin() {
+      axios({
+        method: 'POST',
+        url: 'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
+        data: this.form
+      }).then(res=>{
+        this.$message({
+          message: '登陆成功',
+          type: 'success'
+        })
+        this.$router.push({name: 'home'})
+      })
+      .catch((e)=>{
+        console.log(e)
+        this.$message.error('登陆失败 手机号或验证码错误')
+      })
+      // console.log('handleLogin')
     },
     handleSendCode() {
       const { mobile } = this.form
       axios({
-        methods: "GET",
+        methods: 'GET',
         url: `http://ttapi.research.itcast.cn/mp/v1_0/captchas/${mobile}`
       }).then(res => {
         const data = res.data.data
@@ -58,7 +73,22 @@ export default {
             })
             .onSuccess(function () {
             // your code
-            console.log(captchaObj.getValidate())
+            // console.log(captchaObj.getValidate())
+            const { geetest_challenge: challenge,
+                    geetest_seccode: seccode,
+                    geetest_validate: validate }
+                  = captchaObj.getValidate()
+            axios({
+              methods: 'GET',
+              url: `http://ttapi.research.itcast.cn/mp/v1_0/sms/codes/${mobile}`,
+              params: {
+                challenge,
+                validate,
+                seccode 
+              }
+            }).then(res=>{
+               console.log(res.data)
+            })
             })
            .onError(function () {
             })
