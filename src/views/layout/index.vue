@@ -7,13 +7,16 @@
       <el-header>
           <AppHeader/>
       </el-header>
-      <el-main>Main</el-main>
+      <el-main>
+        <!-- home 文章的评论 内容 文章列表 等等。。 都显示在这-->
+        <router-view/>
+      </el-main>
     </el-container>
   </el-container>
 </template>
 <script>
-import AppAside from "./components/AppAside";
-import AppHeader from "./components/AppHeader";
+import AppAside from "./components/AppAside"
+import AppHeader from "./components/AppHeader"
 export default {
   name: "AppLayout",
   components: {
