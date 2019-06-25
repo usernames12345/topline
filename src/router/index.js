@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import nprogress from 'nprogress'
 Vue.use(Router)
 const router= new Router({
     routes:[
@@ -38,6 +39,8 @@ const router= new Router({
 //from  来在哪相关的数据
 //next 允许通过对的方法
 router.beforeEach((to,from,next)=>{
+    //  路由导航前开启进度条
+    nprogress.start()
    next()
     if(to.path!='./login'){
        //  如果是非登录页面
@@ -59,5 +62,9 @@ router.beforeEach((to,from,next)=>{
             window.location.reload()
         }
     }
+})
+router.afterEach((to,from)=>{
+    //  路由导航完成  结束进度条
+    nprogress.done()
 })
 export default router
