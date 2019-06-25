@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //本地存储就是把数据存储到浏览器中浏览器关闭不会影响数据的保存
+        //本地存储和服务端没有任何关系 仅仅是客户端的能力
+        //本地存储的而数据结构简单理解为就是一个对象
+        //本地存储会根据不同的域进行区分防止数据冲突
+        //持久存储 localStorage
+        //保存
+        //注意 只能存储字符串如果不是会自动toString 
+         //    如果需要存储对象或数据则//wimdow.localStorage.setItem('foo',JSON.stringify(对象))
+         //    读取的时候需要再转回来：JSON.parse(window.localStorage.getItem('foo'))
+         //  window.localStorage.setItem('foo','bar')
+         
+         //删除
+         //window.localStorage.removeItem()
+         //修改
+         //window.localStorage.setItem()
+         //读取
+         //window.localStorage.getItem()
+
+         //会话存储 sessionStorage
+         //window.sessionStorage.setItem('foo','bar')
+         //获取
+         //window.sessionStorage.getItem('foo','bar')
+         //删除
+         //window.sessionStorage.removeItem('foo','bar')
+         //修改
+         //window.sessionStorage.setItem('foo','bar')
+
+    </script>
+</body>
+</html>
