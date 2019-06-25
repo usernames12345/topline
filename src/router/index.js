@@ -4,9 +4,9 @@ Vue.use(Router)
 export default new Router({
     routes:[
         {
-            name:'home',
+            name:'layout',
             path:'/',
-            component:()=>import('@/views/home') 
+            component:()=>import('@/views/layout') 
         },
         {
             name:'login',

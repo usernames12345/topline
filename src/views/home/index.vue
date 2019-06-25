@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>Login Component</p>
+        <p>Home Component</p>
     </div>
 </template>
 <script>

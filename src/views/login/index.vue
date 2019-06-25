@@ -171,7 +171,7 @@ export default {
          window.clearInterval(this.codeTimer)
          //  让倒计时回归原始状态
          this.codeTimeSeconds=initCodeTimeSeconds
-         this.codeTimer=null  //  将存储定时器引用的变量值重新赋值为null
+         this.codeTimer = null  //  将存储定时器引用的变量值重新赋值为null
        }
      },1000)
     }

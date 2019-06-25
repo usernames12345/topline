@@ -4,8 +4,7 @@
     </div>
 </template>
 <script>
-import AppAside from './components/AppAside'
-import AppHeader from './components/AppHeader'
+
 export default {
     name: 'AppHeader.vue',
     data () {
