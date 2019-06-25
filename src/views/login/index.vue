@@ -37,6 +37,7 @@
 <script>
 import axios from 'axios'
 import '@/vendor/gt'
+import { saveUser } from '@/utils/auth'    //  按需加载 加载模块中非export default 成员
 const initCodeTimeSeconds=10
 export default {
   name: 'AppLogin',
@@ -90,7 +91,8 @@ export default {
         //  登陆成功 获取用户信息
         const userInfo = res.data.data
         //  设置在本地存储
-        window.localStorage.setItem('user_info',JSON.stringify(userInfo))
+        // window.localStorage.setItem('user_info',JSON.stringify(userInfo))
+        saveUser(userInfo)
         this.$message({
           message: '登陆成功',
           type: 'success'

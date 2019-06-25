@@ -41,6 +41,9 @@ const router= new Router({
 router.beforeEach((to,from,next)=>{
     //  路由导航前开启进度条
     nprogress.start()
+    // 获取用户信息
+    // const userInfo = window.localStorage.getItem('user_info')
+    const userInfo = getUser(userInfo)
    next()
     if(to.path!='./login'){
        //  如果是非登录页面

@@ -17,6 +17,7 @@
   </el-row>
 </template>
 <script>
+import { removeUser ,getUser} from '@/utils/auth'
 export default {
   name: "AppHeader.vue",
   data() {
@@ -27,7 +28,8 @@ export default {
   },
   //  获取数据
   created() {
-    this.userInfo = JSON.parse(window.localStorage.getItem("user_info"));
+    // this.userInfo = JSON.parse(window.localStorage.getItem("user_info"));
+    getUser(userInfo)
   },
   methods: {
     handleLogout() {
@@ -38,7 +40,8 @@ export default {
       })
         .then(() => {
           //  清楚本地的user_Info
-          window.localStorage.removeItem("user_info"),
+        //   window.localStorage.removeItem("user_info"),
+        removeUser(userInfo)
             //  跳转到登陆页面
             this.$router.push({ name: "login" }),
             this.$message({
