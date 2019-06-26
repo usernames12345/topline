@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import nprogress from "nprogress";
 import { getUser } from '@/utils/auth'
-Vue.use(Router);
+Vue.use(Router)
 const router = new Router({
   routes: [
     //  layout显示到App根组件的路由出口
@@ -22,16 +22,17 @@ const router = new Router({
           name: "publish",
           path: "/publish",
           component: () => import("@/views/publish")
+        },
+        {
+          name: "article",
+          path: "/article",
+          component: () => import("@/views/article")
         }
       ]
-    },
-    {
-      name: "login",
-      path: "/login",
-      component: () => import("@/views/login")
     }
+
   ]
-});
+})
 // 全局导航守卫
 //当访问路由页面的时候会先进入这里
 //to 要去哪相关的参数

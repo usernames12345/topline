@@ -1,12 +1,13 @@
 <template>
-  <!-- 
+<!-- 
     default active 设置默认激活的项
     open close 当菜单展开和收起的时候会被触发
     backgroundcolor 菜单栏的背景颜色
     text-color 文本文字的背景颜色
     active-text-color 被激活时文本的背景颜色
     el-submenu    index 用来区分不同的导航项目 可以用作路由导航路径 必须唯一 否则会出现冲突
-  -->
+-->
+
   <el-menu
     default-active="2"
     @open="handleOpen"
@@ -29,7 +30,7 @@
         <i class="iconfont icon-edit"></i>
         <span slot="title">发布</span>
       </el-menu-item>
-      <el-menu-item index="1-3">
+      <el-menu-item index="/article">
         <i class="iconfont icon-icon-articles"></i>
         <span slot="title">内容列表</span>
       </el-menu-item>
@@ -54,19 +55,19 @@
 </template>
 <script>
 export default {
-  name: "AppAside.vue",
-  data() {
+  name: 'AppAside.vue',
+  data () {
     return {}
   },
   methods: {
-    handleOpen(key, keyPath) {
+    handleOpen (key, keyPath) {
       console.log(key, keyPath)
     },
-    handleClose(key, keyPath) {
+    handleClose (key, keyPath) {
       console.log(key, keyPath)
     }
   }
-};
+}
 </script>
 <style lang='less' scoped>
 </style>
