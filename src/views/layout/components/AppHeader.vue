@@ -1,7 +1,7 @@
 <template>
-  <el-row gutter="20">
+  <el-row :gutter='20'>
     <el-col :span="10">江苏传智播客</el-col>
-    <el-col :span="5" offset="5">
+    <el-col :span="5" :offset='5'>
       <el-dropdown>
         <span class="el-dropdown-link">
           {{ userInfo.name }}
@@ -29,7 +29,7 @@ export default {
   //  获取数据
   created() {
     // this.userInfo = JSON.parse(window.localStorage.getItem("user_info"));
-    getUser(userInfo)
+    this.userInfo=getUser()
   },
   methods: {
     handleLogout() {
@@ -41,7 +41,7 @@ export default {
         .then(() => {
           //  清楚本地的user_Info
         //   window.localStorage.removeItem("user_info"),
-        removeUser(userInfo)
+        removeUser()
             //  跳转到登陆页面
             this.$router.push({ name: "login" }),
             this.$message({

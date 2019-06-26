@@ -85,11 +85,12 @@ export default {
     submitLogin() {
        axios({
         method: 'POST',
-        url: 'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
+        url: 'http://toutiao.course.itcast.cn/mp/v1_0/authorizations',
         data: this.form
       }).then(res=>{
         //  登陆成功 获取用户信息
         const userInfo = res.data.data
+        console.log(userInfo)
         //  设置在本地存储
         // window.localStorage.setItem('user_info',JSON.stringify(userInfo))
         saveUser(userInfo)
@@ -122,7 +123,7 @@ export default {
         const { mobile } = this.form
       axios({
         methods: 'GET',
-        url: `http://ttapi.research.itcast.cn/mp/v1_0/captchas/${mobile}`
+        url: `http://toutiao.course.itcast.cn/mp/v1_0/authorizations/${mobile}`
       }).then(res => {
         const data = res.data.data
         window.initGeetest(
@@ -148,7 +149,7 @@ export default {
                   = captchaObj.getValidate()
                 axios({
                   methods: 'GET',
-                  url: `http://ttapi.research.itcast.cn/mp/v1_0/sms/codes/${mobile}`,
+                  url: `http://toutiao.course.itcast.cn/mp/v1_0/authorizations/${mobile}`,
                   params: {
                     challenge,
                     validate,
