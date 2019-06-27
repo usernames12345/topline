@@ -29,8 +29,12 @@ const router = new Router({
           component: () => import("@/views/article")
         }
       ]
+    },
+    {
+      name: 'login',
+      path: '/login',
+      component: () => import('@/views/login')
     }
-
   ]
 })
 // 全局导航守卫
@@ -44,12 +48,12 @@ router.beforeEach((to, from, next) => {
   // 获取用户信息
   // const userInfo = window.localStorage.getItem('user_info')
   const userInfo = getUser()
-//   next();
-  if (to.path !== "/login") {
+  next();
+  if (to.path !== '/login') {
     //  如果是非登录页面
     //如果没有登陆跳转到登陆页面
     if (!userInfo) {
-      next({ name: "login" })
+      next({ name: 'login' })
     } else {
       //如果登陆了允许通过
       next()

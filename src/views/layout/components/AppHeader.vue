@@ -31,10 +31,7 @@ export default {
     }
   },
   created () {
-    // this.userInfo = JSON.parse(window.localStorage.getItem('user_info')) || {
-    //   name: '123456798',
-    //   photo: 'http://toutiao.meiduo.site/Fkj6tQi3xJwVXi1u2swCElotfdCi'
-    // }
+  
     this.userInfo = getUser()
   },
   methods: {
