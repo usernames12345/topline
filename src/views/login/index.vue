@@ -21,7 +21,11 @@
           <el-input v-model= "form.code" placeholder="请输入验证码"></el-input>
         </el-col>
         <el-col :offset="1" :span="9">
-          <el-button @click= "handleSendCode" :disabled= "!!codeTimer">{{ codeTimer? `剩余${ codeTimeSeconds }秒`:'获取验证码'}}</el-button>
+          <el-button
+           @click= "handleSendCode" 
+           :disabled= "!!codeTimer" :loading = 'codeLoading'>
+           {{ codeTimer? `剩余${ codeTimeSeconds }秒`:'获取验证码'}}
+           </el-button>
         </el-col>
       </el-form-item>
       <el-form-item prop='agree'>
@@ -29,7 +33,7 @@
          <span class='agree-text'>我已阅读并同意 <a href="#">用户协议</a>和<a href="#">隐私条款</a></span>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="login" @click= "handleLogin">登录</el-button>
+        <el-button type="primary" class="login" @click= "handleLogin" :loading= "loginLoading">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -39,7 +43,7 @@ import axios from 'axios'
 import '@/vendor/gt'
 import { saveUser } from '@/utils/auth'    //  按需加载 加载模块中非export default 成员
 import initGeetest from '@/utils/init-geetest'
-const initCodeTimeSeconds=10
+const initCodeTimeSeconds=30
 export default {
   name: 'AppLogin',
   data() {
@@ -48,7 +52,7 @@ export default {
       form: {
         mobile: '18614084953',
         code: '246810',
-        agree: true
+        agree: true,
       },
       //  验证规则对象
       rules: {
@@ -67,7 +71,9 @@ export default {
        ]
       },
       codeTimer: null,  //  倒计时事件
-      codeTimeSeconds: initCodeTimeSeconds      //  倒计时定时器
+      codeTimeSeconds: initCodeTimeSeconds  ,    //  倒计时定时器
+      loginLoading:false  ,///  登录中login
+      codeLoading:false
     }
   },
   methods: {
@@ -85,6 +91,7 @@ export default {
     },
  
    async submitLogin() {
+     this.loginLoading = true
      try {
         const userInfo = await this.$http({
         method: 'POST',
@@ -104,6 +111,7 @@ export default {
      }catch (err) {
          this.$message.error('登陆失败 手机号或验证码错误')
      }
+     this.loginLoading = false
     },
     handleSendCode() {
       //  验证手机号是否有效
@@ -113,7 +121,7 @@ export default {
           return
         }
         //  初始化验证码
-        this.showGeeTest()
+        this.showGeetest()
       })
     
     },
@@ -122,7 +130,8 @@ export default {
 
      async showGeetest () {
       try {
-        this.codeLoading = true
+        //  当验证码初始化未出来就开始loading
+        this.codeLoading=true
         // 任何函数中的 function 函数内部的 this 指向 window
         const { mobile } = this.form
 
@@ -146,6 +155,7 @@ export default {
           captchaObj.verify() // 弹出验证码内容框
         }).onSuccess(async () => {
           try {
+
             // your code
             const {
               geetest_challenge: challenge,
@@ -176,6 +186,7 @@ export default {
         this.$message.error('获取验证码失败')
         this.codeLoading = false
       }
+      this.code
     },
 
 

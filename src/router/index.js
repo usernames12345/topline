@@ -53,6 +53,9 @@ router.beforeEach((to, from, next) => {
     //  如果是非登录页面
     //如果没有登陆跳转到登陆页面
     if (!userInfo) {
+      if(from.path!=='/login'){
+        nprogress.done()
+      }
       next({ name: 'login' })
     } else {
       //如果登陆了允许通过
