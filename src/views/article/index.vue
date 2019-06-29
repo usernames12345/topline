@@ -5,27 +5,44 @@
         <span>数据筛选</span>
         <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
       </div>
-      <!-- 
-          table表格不需要我们去手动v-for 遍历
-          你只需要将数据交给table表格的data属性即可
-          然后配置el-table-column即可
-      -->
-        <el-form ref="form" :model="form" label-width="80px">
+       <el-form ref="form" :model="filterParams" label-width="80px">
         <el-form-item label="状态">
-          <el-radio-group >
+          <el-radio-group v-model="filterParams.status">
             <el-radio label="">全部</el-radio>
-            <el-radio></el-radio>
+            <el-radio
+              v-for="(item, index) in statusType"
+              :key="item.label"
+              :label="index"
+            >{{ item.label }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道">
-          <article-channel >下拉菜单</article-channel>
+            <el-select v-model= "filterParams.channel_id" clearable>
+               <el-option 
+               v-for = "item in channels"
+               :label = "item.name"
+               :key = "item.id"
+               :value = "item.id"
+               ></el-option>
+            </el-select>
         </el-form-item>
-        <el-form-item label="时间">
-          <el-date-picker>
+       <el-form-item label="时间">
+          <el-date-picker
+            @click = "handleDateChange"
+            value-firmat = 'yyyy-MM-dd'
+            v-model = "range_date"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button>查询</el-button>
+          <el-button
+            type="primary"
+            :loading="articleLoading"
+            @click = "handleFilter"
+          >查询</el-button> 
         </el-form-item>
       </el-form>
     </el-card>
@@ -57,7 +74,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" plain>修改</el-button>
-          <el-button size="mini" type="danger" plain>删除</el-button>
+          <el-button size="mini" type="danger" plain  @click= "handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -110,28 +127,63 @@ export default {
       totalCount: 1000, //总数据量
       page: 1, //  当前页码
       articleLoading: false, //  加载中
-      form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        }
+      filterParams: {
+        //   要返回的数据
+        status: '',  //  文章状态
+        channel_id: '', //  频道id
+        begin_pubdate: '',//  开始时间
+        end_pubdate: ''//  结束时间
+        },
+       channels:[],
+       range_date: ''  //  事件范围绑定 这个字段在这里无意义主要是为了触发handleDateChange事件
     }
   },
   created() {
-    this.loadAticles();
+    this.loadAticles(),
+    this.loadChannels()
   },
   methods: {
+   handleDelete(item){
+     console.log(item)
+   },
+    //  点击查询按钮 根据文章列表加载文章
+   handleFilter () {
+     this.page = 1
+     this.loadAticles()
+   },
+   handleDateChange(value){
+     this.filteerParams.begin_pubdate = value[0],
+     this.filterParams.end_pubdate = value[1]
+     //  输出数组把第0项给begin  第二项给 end
+   },
+   async loadChannels () {
+   try {
+      const data = await this.$http({
+       method: 'GET',
+       url: '/channels'
+     })  
+    //  console.log(data)
+     this.channels = data.channels
+   } catch (err) {
+      this.$message.error('获取频道失败')
+   } 
+  },
     //  请求开始
     //  请求开始加载loading
     async loadAticles() {
       this.articleLoading = true
       //  除了登陆相关接口之外其他的接口都必须在请求头中通过Authorization字段提供用户token
       //  当我们登陆成功服务端会生成一个token令牌放到用户信息中
+
+
+      //  在加载文章中筛选无用数据
+      const filterData = {}
+      for(let key in this.filterParams){
+        const item = this.filterParams[key]
+        if(item !=='' && item !== null && item !== undefined){
+          filterDta[key] = item
+        }
+      }
       const data = await this.$http({
         method: "GET",
         url: "/articles",
@@ -143,7 +195,10 @@ export default {
 
         params: {
           per_page: this.pageSize,
-          page: this.page
+          page: this.page,
+          //   把除去之后的状态给到  除去过滤数据剩余数据的状态
+          status: filterData.status
+          //  ...filterData     将filterData混入当前对象中
         }
       });
       this.articles = data.results;
