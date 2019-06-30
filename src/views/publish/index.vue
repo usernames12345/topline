@@ -13,7 +13,11 @@
         <el-input v-model="articleForm.title"></el-input>
       </el-form-item>
       <el-form-item label="内容">
-        <el-input type="textarea" v-model="articleForm.content"></el-input>
+        <quill-editor 
+          v-model="articleForm.content"
+          ref="myQuillEditor"
+          :options="editorOption">
+        </quill-editor>
       </el-form-item>
       <el-form-item label="封面"></el-form-item>
       <el-form-item label="频道">
@@ -27,12 +31,17 @@
   </el-card>
 </template>
 <script>
-import "quill/dist/quill.core.css";
-import "quill/dist/quill.snow.css";
-import "quill/dist/quill.bubble.css";
+import Articlechannel from '@/components/article-channel'
+import "quill/dist/quill.core.css"
+import "quill/dist/quill.snow.css"
+import "quill/dist/quill.bubble.css"
 import { quillEditor } from 'vue-quill-editor'
 export default {
   name: "AppPublish",
+  components: {
+    Articlechannel,
+    quillEditor
+  },
   data() {
     return {
       articleForm: {
@@ -43,7 +52,8 @@ export default {
           type: 0,
           images: []
         }
-      }
+      },
+      editorOption: {}  //富文本编辑器配置选项
     }
   },
   methods: {
@@ -69,6 +79,12 @@ export default {
   }
 }
 </script>
+<style>
+  .ql-editor {
+  height: 500px !important;
+}
+</style>
+
 <style lang='less' scoped>
 .publish-card {
   .header {
@@ -78,4 +94,5 @@ export default {
     align-items: center;
   }
 }
+
 </style>
