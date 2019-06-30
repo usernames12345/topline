@@ -12,7 +12,7 @@
 <script>
 export default {
   name:"ArticleChannel",
-  prop: {
+  props: {
       value: {
         type:[String , Number],  //  类型  数字字符串
         required: true

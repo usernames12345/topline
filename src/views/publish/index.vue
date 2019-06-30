@@ -21,25 +21,27 @@
       </el-form-item>
       <el-form-item label="封面"></el-form-item>
       <el-form-item label="频道">
-        <el-select v-model="articleForm.channel_id" placeholder="请选择活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
-        </el-select>
+        <article-channel v-model ="articleForm.channel_id"></article-channel>
       </el-form-item>
     </el-form>
     <!-- /表单 -->
   </el-card>
 </template>
 <script>
-import Articlechannel from '@/components/article-channel'
+import ArticleChannel from '@/components/article-channel'
 import "quill/dist/quill.core.css"
 import "quill/dist/quill.snow.css"
 import "quill/dist/quill.bubble.css"
 import { quillEditor } from 'vue-quill-editor'
 export default {
   name: "AppPublish",
+  created () {
+    if(this.$route.name === 'publish-edit'){
+      this.loadAticles()
+    }
+  },
   components: {
-    Articlechannel,
+    ArticleChannel,
     quillEditor
   },
   data() {
@@ -47,7 +49,7 @@ export default {
       articleForm: {
         title: "",
         content: "",
-        channel_id: "3",
+        channel_id: "",
         cover: {
           type: 0,
           images: []
@@ -57,23 +59,49 @@ export default {
     }
   },
   methods: {
-  
+    async loadAticles () {
+        try {
+          const data = await this.$http ({
+            method: 'GET',
+            url: `/articles/${this.$route.params.id}`
+          })
+        this.articleForm = data
+        }catch (err) {
+          console.log(err)
+          this.$message.error('获取文章列表失败')
+        }
+    },
     async handlePublish(draft) {
       try {
-       await this.$http({
-          method: "POST",
-          url: "/articles",
-          params: {
-            draft
-          },
-          data: this.articleForm
-        })
-        this.$message({
-          type: "success",
-          message: "发布成功"
-        })
+        if(this.$route.name === 'publish'){
+          await this.$http({
+            method: "POST",
+            url: "/articles",
+            params: {
+              draft
+            },
+            data: this.articleForm
+          })
+          this.$message({
+            type: "success",
+            message: "发布成功"
+          })
+        }else{
+          await this.$http({
+            method: 'PUT',
+            url: `/articles/${this.$route.params.id}`,
+            params: {
+              draft
+            },
+            data: this.articleForm
+          })
+          this.$message({
+            type: 'success',
+            message: '修改成功'
+          })
+        }
       } catch (err) {
-        this.$message.error("发布失败", err)
+        this.$message.error("操作失败", err)
       }
     }
   }
