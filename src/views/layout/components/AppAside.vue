@@ -39,7 +39,7 @@
       <i class="iconfont icon-comment"></i>
       <span slot="title">评论</span>
     </el-menu-item>
-    <el-menu-item index="/image">
+    <el-menu-item index="/media">
       <i class="iconfont icon-image"></i>
       <span slot="title">素材</span>
     </el-menu-item>
