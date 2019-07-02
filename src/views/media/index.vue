@@ -5,8 +5,9 @@
     </div>
     <div class="action">
       <el-radio-group v-model="active">
-        <el-radio-button label="全部"></el-radio-button>
-        <el-radio-button label="收藏"></el-radio-button>
+          <!-- 如果想给一个组件注册一个原生事件 @原生事件.native -->
+        <el-radio-button label="全部" @click.native = 'loadImages(false)'></el-radio-button>
+        <el-radio-button label="收藏" @click.native = 'loadImages(true)'></el-radio-button>
       </el-radio-group>
       <el-button type="primary">上传图片</el-button>
     </div>
@@ -19,8 +20,18 @@
            style = ' max-width:100% '>
           <div style="padding: 14px;">
             <div class="bottom clearfix">
-              <el-button type="primary" plain :icon= "item.is_collected ? 'el-icon-star-on' :'el-icon-star-off'" circle></el-button>
-              <el-button type="primary" plain icon='el-icon-delete' circle></el-button>
+              <el-button 
+              type="primary"
+              plain
+             :icon= "item.is_collected ? 'el-icon-star-on' :'el-icon-star-off'" 
+              circle
+              @click = 'handleCollect(item)'></el-button>
+              <el-button type="primary"
+               plain
+               icon='el-icon-delete'
+               circle
+               @click = 'handleDelete(item)'
+               ></el-button>
             </div>
           </div>
         </el-card>
@@ -60,6 +71,47 @@ export default {
           console.log(err)
           this.$message.error ('加载图片失败',err)
        }
+    },
+    async handleCollect (item) {
+        const collect = !item.is_collected
+      try {
+         const data = await this.$http ({
+          method: 'PUT',
+          url: `/user/images/${item.id}`,
+          data: {
+              collect
+          }
+        })
+        this.$message ({
+            type: 'success',
+            message: `收藏成功`
+        })
+        item.is_collected = data.collect
+        this.$message({
+            type: 'success',
+            message: `${collect ? '' : '取消'}收藏成功`
+        })
+      }catch (err) {
+          console.log(err)
+          this.$message.error('收藏失败',err)
+      }
+    },
+    async handleDelete(item) {
+      try {
+         await this.$http ({
+          method: 'DELETE',
+          url: `/user/images/${item.id}`
+     })
+    //   删除之后重新加载图片列表
+    this.loadImages()
+    this.$message({
+        type: 'success',
+        message: '删除成功',
+    })
+      }
+      catch (err) {
+        this.$message.error('删除失败')
+      }
     }
   }
 }
