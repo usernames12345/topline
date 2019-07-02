@@ -37,7 +37,7 @@ export default {
   name: "AppPublish",
   created () {
     if(this.$route.name === 'publish-edit'){
-      this.loadAticles()
+      this.loadArticles()
     }
   },
   components: {
@@ -58,8 +58,42 @@ export default {
       editorOption: {}  //富文本编辑器配置选项
     }
   },
+
+  /**
+   * 监视
+   * 可以监视实例中的数据成员
+   * 当被监视数据发生变化 就会调用处理函数
+   */
+  // watch: {
+  //   //  监视实例（this）中的$route 当$route 发生变化 执行处理函数
+  //   '$route' (to,from) {
+  //      console.log (this.$route)
+  //      //  对路由变化做出响应
+  //      console.log (to,from)
+  //      //  从编辑到发布由于是一个组件路由会缓存 不会重新创建
+  //     //  所以在这里加一个处理
+  //     //对于当前组件来说如果你是从编辑过来的
+  //     if(from.name === 'publish-edit') {
+  //       this.articleForm = {
+  //         title: '', //标题
+  //         content: '', //内容
+  //         channel_id: '', //频道
+  //         cover: {
+  //           type: 0,   //封面类型 -1 自动  0 无图 1 1张  3 3张
+  //           images: []
+  //         } //  封面
+  //       }
+  //     }
+  //   }
+  // },
+
+  created () {
+    if(this.$route.name === 'publish-edit') {
+      this.loadArticles()
+    }
+  },
   methods: {
-    async loadAticles () {
+    async loadArticles () {
         try {
           const data = await this.$http ({
             method: 'GET',
